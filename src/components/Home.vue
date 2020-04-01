@@ -49,6 +49,9 @@
             ><p class="developed-by">Developed by <b>Rafet Topçu</b></p></a-col
           >
           <a-col style="cursor:pointer;">
+            <a-button type="link" @click="showMenu = true" size="small">
+              <span class="cell-text-dark"> Menu</span></a-button
+            >
             <a-button type="link" @click="replay" size="small">
               <span class="cell-text-dark"> Restart</span></a-button
             >
@@ -70,7 +73,7 @@
                 background: colors[cell].back + '!important',
                 color: colors[cell].text
               }"
-              ><p>{{ cell > 0 ? cell : "" }}</p>
+              ><p>{{ cell > 0 ? cell : '' }}</p>
             </a-col>
           </a-row>
           <a-row
@@ -89,6 +92,19 @@
               </center>
             </a-col>
           </a-row>
+          <a-row
+            v-if="showMenu"
+            justify="center"
+            type="flex"
+            align="middle"
+            class="menu-panel"
+          >
+            <Menu
+              v-model="gridSize"
+              @select-new-game="onSelectNewGame"
+              @close="showMenu = false"
+            />
+          </a-row>
         </div>
         <span style="opacity:.6"
           >You can play with <kbd>W</kbd>,<kbd>A</kbd>,<kbd>S</kbd>,<kbd>D</kbd>
@@ -99,9 +115,10 @@
 </template>
 
 <script>
-import { transpose } from "mathjs";
-
+import { transpose } from 'mathjs';
+import Menu from './Menu';
 export default {
+  components: { Menu },
   data() {
     return {
       grid: [],
@@ -109,34 +126,35 @@ export default {
       score: 0,
       best: 0,
       colors: {
-        0: { back: "", text: "" },
-        2: { back: "#EEE4DA", text: "#776F64" },
-        4: { back: "#ECE0CA", text: "#776F64" },
-        8: { back: "#F2B178", text: "#fff" },
-        16: { back: "#EC8D53", text: "#fff" },
-        32: { back: "#F57C5F", text: "#fff" },
-        64: { back: "#E95839", text: "#fff" },
-        128: { back: "#F3D96B", text: "#fff" },
-        256: { back: "#F1D04B", text: "#fff" },
-        512: { back: "#E4C029", text: "#fff" }
-      }
+        0: { back: '', text: '' },
+        2: { back: '#EEE4DA', text: '#776F64' },
+        4: { back: '#ECE0CA', text: '#776F64' },
+        8: { back: '#F2B178', text: '#fff' },
+        16: { back: '#EC8D53', text: '#fff' },
+        32: { back: '#F57C5F', text: '#fff' },
+        64: { back: '#E95839', text: '#fff' },
+        128: { back: '#F3D96B', text: '#fff' },
+        256: { back: '#F1D04B', text: '#fff' },
+        512: { back: '#E4C029', text: '#fff' }
+      },
+      showMenu: false
     };
   },
   mounted() {
     window.addEventListener(
-      "keypress",
+      'keypress',
       function(e) {
         const key = String.fromCharCode(e.keyCode);
-        if (key === "a" || key === "A") {
+        if (key === 'a' || key === 'A') {
           this.moveLeft();
         }
-        if (key === "d" || key === "D") {
+        if (key === 'd' || key === 'D') {
           this.moveRight();
         }
-        if (key === "w" || key === "W") {
+        if (key === 'w' || key === 'W') {
           this.moveUp();
         }
-        if (key === "s" || key === "S") {
+        if (key === 's' || key === 'S') {
           this.moveDown();
         }
       }.bind(this)
@@ -147,15 +165,20 @@ export default {
     score(val) {
       if (val > this.best) {
         this.best = val;
-        this.$localStorage.set("best", val);
+        this.$localStorage.set('best', val);
       }
     }
   },
   methods: {
+    onSelectNewGame() {
+      this.replay();
+      this.showMenu = false;
+    },
+
     replay() {
       this.score = 0;
       this.grid = [];
-      this.best = this.$localStorage.get("best");
+      this.best = this.$localStorage.get('best');
       for (let i = 0; i < this.gridSize; i++) {
         this.grid.push(new Array(this.gridSize).fill(0));
       }
@@ -272,7 +295,7 @@ export default {
     }
   },
   created() {
-    this.best = this.$localStorage.get("best");
+    this.best = this.$localStorage.get('best');
     for (let i = 0; i < this.gridSize; i++) {
       this.grid.push(new Array(this.gridSize).fill(0));
     }
@@ -283,12 +306,12 @@ export default {
 </script>
 
 <style>
-@import url("https://fonts.googleapis.com/css2?family=Kdam+Thmor&family=Sen:wght@700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Kdam+Thmor&family=Sen:wght@700&display=swap');
 body {
   background: #ecf0f1 !important;
 }
 .back-plate {
-  font-family: "Sen", sans-serif;
+  font-family: 'Sen', sans-serif;
   background: #fbf8f1;
   padding: 28px;
   border-radius: 4px;
@@ -357,6 +380,19 @@ body {
   opacity: 0.7;
 }
 .end-panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  padding: 28px;
+  border-radius: 4px;
+  background: #000000aa;
+
+  transition: background 0.3s;
+  font-size: 50px;
+}
+.menu-panel {
   position: absolute;
   top: 0;
   right: 0;
