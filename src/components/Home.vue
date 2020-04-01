@@ -2,6 +2,24 @@
   <div>
     <a-row type="flex" justify="center" align="middle" style="margin-top:32px">
       <a-col class="back-plate">
+        <a-row type="flex" justify="end" align="middle" :gutter="4">
+          <a-col>
+            <a target="_blank" href="https://github.com/rafettopcu/2048-vue">
+              <img
+                src="https://cdn0.iconfinder.com/data/icons/octicons/1024/mark-github-512.png"
+                width="16"
+              />
+            </a>
+          </a-col>
+
+          <a-col>
+            <a target="_blank" href="https://github.com/rafettopcu/2048-vue"
+              ><span style="font-size:12px;" class="cell-text-dark"
+                >github</span
+              ></a
+            ></a-col
+          >
+        </a-row>
         <a-row
           type="flex"
           justify="space-between"
@@ -31,12 +49,8 @@
             ><p class="developed-by">Developed by <b>Rafet Topçu</b></p></a-col
           >
           <a-col style="cursor:pointer;">
-            <a-button
-              type="link"
-              style="color:black !important"
-              @click="replay"
-              size="small"
-              >Restart</a-button
+            <a-button type="link" @click="replay" size="small">
+              <span class="cell-text-dark"> Restart</span></a-button
             >
           </a-col>
         </a-row>
@@ -56,7 +70,7 @@
                 background: colors[cell].back + '!important',
                 color: colors[cell].text
               }"
-              ><p>{{ cell > 0 ? cell : '' }}</p>
+              ><p>{{ cell > 0 ? cell : "" }}</p>
             </a-col>
           </a-row>
           <a-row
@@ -85,7 +99,7 @@
 </template>
 
 <script>
-import { transpose } from 'mathjs';
+import { transpose } from "mathjs";
 
 export default {
   data() {
@@ -95,34 +109,34 @@ export default {
       score: 0,
       best: 0,
       colors: {
-        0: { back: '', text: '' },
-        2: { back: '#EEE4DA', text: '#776F64' },
-        4: { back: '#ECE0CA', text: '#776F64' },
-        8: { back: '#F2B178', text: '#fff' },
-        16: { back: '#EC8D53', text: '#fff' },
-        32: { back: '#F57C5F', text: '#fff' },
-        64: { back: '#E95839', text: '#fff' },
-        128: { back: '#F3D96B', text: '#fff' },
-        256: { back: '#F1D04B', text: '#fff' },
-        512: { back: '#E4C029', text: '#fff' }
+        0: { back: "", text: "" },
+        2: { back: "#EEE4DA", text: "#776F64" },
+        4: { back: "#ECE0CA", text: "#776F64" },
+        8: { back: "#F2B178", text: "#fff" },
+        16: { back: "#EC8D53", text: "#fff" },
+        32: { back: "#F57C5F", text: "#fff" },
+        64: { back: "#E95839", text: "#fff" },
+        128: { back: "#F3D96B", text: "#fff" },
+        256: { back: "#F1D04B", text: "#fff" },
+        512: { back: "#E4C029", text: "#fff" }
       }
     };
   },
   mounted() {
     window.addEventListener(
-      'keypress',
+      "keypress",
       function(e) {
         const key = String.fromCharCode(e.keyCode);
-        if (key === 'a' || key === 'A') {
+        if (key === "a" || key === "A") {
           this.moveLeft();
         }
-        if (key === 'd' || key === 'D') {
+        if (key === "d" || key === "D") {
           this.moveRight();
         }
-        if (key === 'w' || key === 'W') {
+        if (key === "w" || key === "W") {
           this.moveUp();
         }
-        if (key === 's' || key === 'S') {
+        if (key === "s" || key === "S") {
           this.moveDown();
         }
       }.bind(this)
@@ -133,7 +147,7 @@ export default {
     score(val) {
       if (val > this.best) {
         this.best = val;
-        this.$localStorage.set('best', val);
+        this.$localStorage.set("best", val);
       }
     }
   },
@@ -141,7 +155,7 @@ export default {
     replay() {
       this.score = 0;
       this.grid = [];
-      this.best = this.$localStorage.get('best');
+      this.best = this.$localStorage.get("best");
       for (let i = 0; i < this.gridSize; i++) {
         this.grid.push(new Array(this.gridSize).fill(0));
       }
@@ -258,7 +272,7 @@ export default {
     }
   },
   created() {
-    this.best = this.$localStorage.get('best');
+    this.best = this.$localStorage.get("best");
     for (let i = 0; i < this.gridSize; i++) {
       this.grid.push(new Array(this.gridSize).fill(0));
     }
@@ -269,12 +283,12 @@ export default {
 </script>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Kdam+Thmor&family=Sen:wght@700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Kdam+Thmor&family=Sen:wght@700&display=swap");
 body {
   background: #ecf0f1 !important;
 }
 .back-plate {
-  font-family: 'Sen', sans-serif;
+  font-family: "Sen", sans-serif;
   background: #fbf8f1;
   padding: 28px;
   border-radius: 4px;
@@ -317,7 +331,6 @@ body {
   color: white;
 }
 .top-menu {
-  margin: 20px 0;
 }
 .top-left {
   font-size: 64px;
